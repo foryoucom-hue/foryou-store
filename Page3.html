@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Price List - ForYouJoki</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --accent: #ffe082;
+      --glass: rgba(255,255,255,0.12);
+      --ios-ease: cubic-bezier(.22,1,.36,1);
+      --bounce: cubic-bezier(0.2, 1.8, 0.2, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: url('background_kazuha.jpeg') center/cover no-repeat fixed;
+      font-family: 'Quicksand', sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      padding-left: 90px;
+      overflow-x: hidden;
+    }
+
+    .bg-blur {
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(14px) brightness(0.6);
+      z-index: -1;
+    }
+
+    .header {
+      padding: 28px 36px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .home-btn {
+      background: var(--glass);
+      padding: 12px 24px;
+      border-radius: 14px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all 0.3s var(--bounce);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .home-btn:hover {
+      background: var(--accent);
+      color: #111;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    }
+
+    .page-title {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 2px;
+    }
+
+    .price-container {
+      max-width: 1400px;
+      margin: 20px auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .price-card {
+      background: var(--glass);
+      border-radius: 20px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.08);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.4s var(--bounce);
+    }
+
+    .price-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .price-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .service-name {
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .price {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 16px 0;
+      color: #fff;
+    }
+
+    .price span {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
+    .features {
+      list-style: none;
+      margin: 20px 0;
+    }
+
+    .features li {
+      margin: 12px 0;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .features li:before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .order-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s var(--bounce);
+      margin-top: 20px;
+    }
+
+    .order-btn:hover {
+      background: var(--accent);
+      color: #111;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    }
+
+    .popular {
+      position: relative;
+      border: 1px solid var(--accent);
+    }
+
+    .popular:before {
+      content: "POPULAR";
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      background: var(--accent);
+      color: #111;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      body { padding-left: 0; }
+      .header { padding: 20px; }
+      .price-container { padding: 10px; }
+      .price-card { margin: 10px; }
+    }
+  
+/* 
+@media (max-width: 768px) {
+  body { padding-left: 0 !important; }
+  .sidebar { display: none !important; }
+  header { margin-left: 0 !important; width: 100% !important; padding: 16px 20px !important; justify-content: center !important; }
+  nav { gap: 18px !important; flex-wrap: wrap !important; justify-content: center !important; }
+  .main-content { flex-direction: column !important; align-items: center !important; text-align: center !important; }
+  .center-block { align-items: center !important; }
+  .title { font-size: 2rem !important; letter-spacing: .08em !important; }
+  .main-card { width: 100% !important; max-width: 420px !important; height: auto !important; }
+  .big-cards-row { flex-direction: column !important; align-items: center !important; gap: 20px !important; }
+  .big-card { width: 90% !important; height: auto !important; }
+  .footer { font-size: 0.8rem !important; padding: 10px !important; }
+}
+</style>
+</head>
+<body>
+  <div class="bg-blur"></div>
+
+  <header class="header">
+    <a href="index.html" class="home-btn" id="homeBtn">HOME</a>
+    <h1 class="page-title">PRICE LIST</h1>
+  </header>
+
+  <div class="price-container" id="priceContainer">
+    <!-- Price cards will be injected here -->
+  </div>
+
+  <script>
+    const services = [
+      {
+        name: "Daily Commission",
+        price: "75K",
+        period: "/ bulan",
+        features: [
+          "4 Commission Quest",
+          "Claim Reward",
+          "Extra Primogems",
+          "Bonus Materials"
+        ],
+        popular: false
+      },
+      {
+        name: "Story Quest",
+        price: "25K",
+        period: "/ bagian",
+        features: [
+          "Complete Story Quest",
+          "Get All Rewards",
+          "Unlock New Areas",
+          "Character Development"
+        ],
+        popular: true
+      },
+      {
+        name: "Exploration",
+        price: "50K++",
+        period: "/ region",
+        features: [
+          "100% Area Completion",
+          "All Teleport Waypoints",
+          "All Oculus Collected",
+          "Hidden Achievements"
+        ],
+        popular: false
+      },
+      {
+        name: "Spiral Abyss",
+        price: "45K",
+        period: "/ full clear",
+        features: [
+          "Floor 9-12 Clear",
+          "36 Stars Achievement",
+          "Primogems Rewards",
+          "Strategic Combat"
+        ],
+        popular: false
+      },
+      {
+        name: "Imaginarium",
+        price: "5-20K",
+        period: "/ LT",
+        features: [
+          "LT 3 : 5K",
+          "LT 6 : 10K",
+          "LT 8 : 15K",
+          "LT 10 : 20K"
+        ],
+        popular: false
+      },
+      {
+        name: "Domain",
+        price: "2K",
+        period: "/ domain",
+        features: [
+          "Artifact Farming",
+          "Talent Materials",
+          "Weapon Materials",
+          "Resource Management"
+        ],
+        popular: false
+      }
+    ];
+
+    const priceContainer = document.getElementById('priceContainer');
+    
+    services.forEach((service, i) => {
+      const card = document.createElement('div');
+      card.className = `price-card ${service.popular ? 'popular' : ''}`;
+      
+      card.innerHTML = `
+        <h2 class="service-name">${service.name}</h2>
+        <div class="price">Rp ${service.price}<span>${service.period}</span></div>
+        <ul class="features">
+          ${service.features.map(feature => `<li>${feature}</li>`).join('')}
+        </ul>
+        <button class="order-btn" onclick="window.open('https://wa.me/6285693946079?text=Halo, bang mau joki bang ${service.name}', '_blank')">Order via WhatsApp</button>
+      `;
+      
+      priceContainer.appendChild(card);
+      
+      setTimeout(() => {
+        card.classList.add('visible');
+      }, i * 100);
+    });
+
+    // 
+    const homeBtn = document.getElementById('homeBtn');
+    if(homeBtn) {
+      homeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.documentElement.classList.add('page-exit');
+        setTimeout(() => location.href = this.href, 400);
+      });
+    }
+  </script>
+
+  <footer class="footer">
+    <p>© 2025 ForYouJoki. All rights reserved.</p>
+  </footer>
+</body>
+</html>

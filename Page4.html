@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Donors - ForYouJoki</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --accent: #ffe082;
+      --glass: rgba(255,255,255,0.12);
+      --ios-ease: cubic-bezier(.22,1,.36,1);
+      --bounce: cubic-bezier(0.2, 1.8, 0.2, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: url('background_kazuha.jpeg') center/cover no-repeat fixed;
+      font-family: 'Quicksand', sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      padding-left: 90px;
+      overflow-x: hidden;
+    }
+
+    .bg-blur {
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(14px) brightness(0.6);
+      z-index: -1;
+    }
+
+    .header {
+      padding: 28px 36px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .home-btn {
+      background: var(--glass);
+      padding: 12px 24px;
+      border-radius: 14px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all 0.3s var(--bounce);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .home-btn:hover {
+      background: var(--accent);
+      color: #111;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    }
+
+    .page-title {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 2px;
+    }
+
+    
+    .donors-container {
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    
+    .preview-section {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .preview-image {
+      max-width: 90%;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      margin: 20px auto;
+      display: block;
+    }
+
+    
+    .top-donors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      padding: 20px 0;
+    }
+
+    .donor-card {
+      background: var(--glass);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.08);
+      transform: translateY(30px);
+      opacity: 0;
+      animation: cardEnter 0.5s var(--bounce) forwards;
+    }
+
+    @keyframes cardEnter {
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .donor-rank {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 40px;
+    }
+
+    .donor-info {
+      flex: 1;
+    }
+
+    .donor-name {
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    .donor-amount {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .donor-platform {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    .top-3 {
+      transform: scale(1.05);
+      border: 1px solid var(--accent);
+    }
+
+    .top-3 .donor-rank {
+      font-size: 2.6rem;
+      background: linear-gradient(45deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .platform-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .platform-link {
+      background: var(--glass);
+      padding: 16px 32px;
+      border-radius: 16px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s var(--bounce);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .platform-link:hover {
+      background: var(--accent);
+      color: #111;
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    }
+
+    .platform-icon {
+      font-size: 1.4rem;
+    }
+
+    .section-title {
+      color: var(--accent);
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .platform-section {
+      margin-bottom: 60px;
+    }
+
+    .donors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      body { padding-left: 0; }
+      .header { padding: 20px; }
+      .donors-container {
+        grid-template-columns: 1fr;
+        padding: 15px;
+      }
+      .platform-links {
+        flex-direction: column;
+        padding: 0 20px;
+      }
+      .platform-link {
+        text-align: center;
+        justify-content: center;
+      }
+      .platform-section {
+        min-height: 400px;
+      }
+      .embed-container {
+        min-height: 400px;
+      }
+      .embed-container iframe {
+        height: 400px;
+      }
+    }
+  
+/* 
+@media (max-width: 768px) {
+  body { padding-left: 0 !important; }
+  .sidebar { display: none !important; }
+  header { margin-left: 0 !important; width: 100% !important; padding: 16px 20px !important; justify-content: center !important; }
+  nav { gap: 18px !important; flex-wrap: wrap !important; justify-content: center !important; }
+  .main-content { flex-direction: column !important; align-items: center !important; text-align: center !important; }
+  .center-block { align-items: center !important; }
+  .title { font-size: 2rem !important; letter-spacing: .08em !important; }
+  .main-card { width: 100% !important; max-width: 420px !important; height: auto !important; }
+  .big-cards-row { flex-direction: column !important; align-items: center !important; gap: 20px !important; }
+  .big-card { width: 90% !important; height: auto !important; }
+  .footer { font-size: 0.8rem !important; padding: 10px !important; }
+}
+</style>
+</head>
+<body>
+  <div class="bg-blur"></div>
+
+  <header class="header">
+    <a href="index.html" class="home-btn" id="homeBtn">HOME</a>
+    <h1 class="page-title">TOP DONORS</h1>
+  </header>
+
+  <div class="donors-container">
+    <!-- Platform Links -->
+    <div class="platform-links">
+      <a href="https://saweria.co/isisiss" target="_blank" class="platform-link">
+        <span class="platform-icon">💰</span>
+        <span class="platform-text">Donate via Saweria</span>
+      </a>
+      <a href="https://trakteer.id/FORYOUCOM" target="_blank" class="platform-link">
+        <span class="platform-icon">☕</span>
+        <span class="platform-text">Trakteer Kopi</span>
+      </a>
+    </div>
+
+    <!-- Saweria -->
+    <div class="platform-section">
+      <h2 class="section-title">Top Saweria Donors</h2>
+      <div class="donors-grid">
+        <div class="donor-card top-3" style="animation-delay: 0.1s">
+          <div class="donor-rank">#1</div>
+          <div class="donor-info">
+            <div class="donor-name">AcengTrondol</div>
+            <div class="donor-amount">Rp 500.000</div>
+          </div>
+        </div>
+
+        <div class="donor-card top-3" style="animation-delay: 0.2s">
+          <div class="donor-rank">#2</div>
+          <div class="donor-info">
+            <div class="donor-name">VarioBalap</div>
+            <div class="donor-amount">Rp 300.000</div>
+          </div>
+        </div>
+
+        <div class="donor-card" style="animation-delay: 0.3s">
+          <div class="donor-rank">#3</div>
+          <div class="donor-info">
+            <div class="donor-name">OyotStore</div>
+            <div class="donor-amount">Rp 150.000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trakteer -->
+    <div class="platform-section">
+      <h2 class="section-title">Top Trakteer Donors</h2>
+      <div class="donors-grid">
+        <div class="donor-card top-3" style="animation-delay: 0.4s">
+          <div class="donor-rank">#1</div>
+          <div class="donor-info">
+            <div class="donor-name">BomelStore</div>
+            <div class="donor-amount">Rp 400.000</div>
+          </div>
+        </div>
+
+        <div class="donor-card top-3" style="animation-delay: 0.5s">
+          <div class="donor-rank">#2</div>
+          <div class="donor-info">
+            <div class="donor-name">PT OMLING</div>
+            <div class="donor-amount">Rp 200.000</div>
+          </div>
+        </div>
+
+        <div class="donor-card" style="animation-delay: 0.6s">
+          <div class="donor-rank">#3</div>
+          <div class="donor-info">
+            <div class="donor-name">AdvStyle</div>
+            <div class="donor-amount">Rp 100.000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 
+    const homeBtn = document.getElementById('homeBtn');
+    if(homeBtn) {
+      homeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.documentElement.classList.add('page-exit');
+        setTimeout(() => location.href = this.href, 400);
+      });
+    }
+  </script>
+
+  <footer class="footer">
+    <p>© 2025 ForYouJoki. All rights reserved.</p>
+  </footer>
+</body>
+</html>

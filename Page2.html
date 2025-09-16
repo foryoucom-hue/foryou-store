@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery - ForYouJoki</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --accent: #ffe082;
+      --glass: rgba(255,255,255,0.18);
+      --ios-ease: cubic-bezier(.22,1,.36,1);
+      --bounce: cubic-bezier(0.2, 1.8, 0.2, 1);
+      --swift: 260ms;
+      --med: 460ms;
+    }
+
+  
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: url('background_kazuha.jpeg') center/cover no-repeat fixed;
+      font-family: 'Quicksand', sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      padding-left: 90px;
+    }
+
+    .bg-blur {
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(12px) brightness(0.65);
+      z-index: -1;
+    }
+
+    
+    .gallery-header {
+      padding: 28px 36px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .home-btn {
+      background: var(--glass);
+      padding: 10px 20px;
+      border-radius: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      transition: all var(--swift) var(--bounce);
+    }
+    
+    .home-btn:hover {
+      background: var(--accent);
+      color: #222;
+      transform: translateY(-4px);
+    }
+
+   
+    .gallery {
+      max-width: 1280px;
+      margin: 20px auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .item {
+      aspect-ratio: 1;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s var(--ios-ease);
+    }
+
+    .item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .item:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+
+    .item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s var(--ios-ease);
+    }
+
+    .item:hover img {
+      transform: scale(1.08);
+    }
+
+  
+    @keyframes smoothEnter {
+      0% { opacity: 0; transform: scale(1.02); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .page-enter {
+      animation: smoothEnter 0.4s var(--ios-ease) forwards;
+    }
+
+  
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s var(--ios-ease);
+      z-index: 999;
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-wrap {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    .lightbox-wrap img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 12px;
+      transform: scale(0.95);
+      transition: transform 0.4s var(--ios-ease);
+    }
+
+    .lightbox.active img {
+      transform: scale(1);
+    }
+
+    .lb-close {
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: var(--glass);
+      color: #fff;
+      font-size: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all var(--swift) var(--bounce);
+    }
+
+    .lb-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      background: var(--glass);
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all var(--swift) var(--bounce);
+    }
+
+    .lb-nav.prev { left: -60px; }
+    .lb-nav.next { right: -60px; }
+
+    .lb-close:hover,
+    .lb-nav:hover {
+      background: var(--accent);
+      color: #222;
+      transform: scale(1.1);
+    }
+  
+/* buat respon ini ceng */
+@media (max-width: 768px) {
+  body { padding-left: 0 !important; }
+  .sidebar { display: none !important; }
+  header { margin-left: 0 !important; width: 100% !important; padding: 16px 20px !important; justify-content: center !important; }
+  nav { gap: 18px !important; flex-wrap: wrap !important; justify-content: center !important; }
+  .main-content { flex-direction: column !important; align-items: center !important; text-align: center !important; }
+  .center-block { align-items: center !important; }
+  .title { font-size: 2rem !important; letter-spacing: .08em !important; }
+  .main-card { width: 100% !important; max-width: 420px !important; height: auto !important; }
+  .big-cards-row { flex-direction: column !important; align-items: center !important; gap: 20px !important; }
+  .big-card { width: 90% !important; height: auto !important; }
+  .footer { font-size: 0.8rem !important; padding: 10px !important; }
+}
+</style>
+</head>
+<body>
+  <div class="bg-blur"></div>
+
+  <div class="gallery-header">
+    <a href="index.html" class="home-btn" id="homeBtn">HOME</a>
+    <h1 class="gallery-title">Gallery</h1>
+  </div>
+
+  <div class="gallery" id="gallery"></div>
+
+  
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-wrap">
+      <button class="lb-close" onclick="closeLightbox()">&times;</button>
+      <img id="lightbox-img" src="" alt="">
+      <button class="lb-nav prev" onclick="prevImage()">&lt;</button>
+      <button class="lb-nav next" onclick="nextImage()">&gt;</button>
+    </div>
+  </div>
+
+  <script>
+  
+    const images = [
+      {src:'testi_termahal_didunia1.jpg', alt:'Testimonial 1'},
+      {src:'gallery2.jpg', alt:'Gallery 2'},
+      {src:'gallery3.jpg', alt:'Gallery 3'},
+      {src:'gallery4.jpg', alt:'Gallery 4'},
+      {src:'gallery5.jpg', alt:'Gallery 5'},
+      {src:'gallery6.jpg', alt:'Gallery 6'},
+      {src:'gallery7.jpg', alt:'Gallery 7'},
+      {src:'gallery8.jpg', alt:'Gallery 8'},
+      {src:'gallery9.jpg', alt:'Gallery 9'},
+      {src:'gallery10.jpg', alt:'Gallery 10'},
+      {src:'gallery11.jpg', alt:'Gallery 11'}, 
+      {src:'gallery12.jpg', alt:'Gallery 12'}
+    ];
+
+  
+    const gallery = document.getElementById('gallery');
+    images.forEach((img, i) => {
+      const item = document.createElement('div');
+      item.className = 'item';
+      item.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy">`;
+      item.onclick = () => openLightbox(i);
+      gallery.appendChild(item);
+
+    
+      setTimeout(() => {
+        item.classList.add('visible');
+      }, i * 50);
+    });
+
+  
+    const homeBtn = document.getElementById('homeBtn');
+    if(homeBtn) {
+      homeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        sessionStorage.setItem('fromPage2', '1');
+        document.documentElement.classList.add('page-exit');
+        setTimeout(() => location.href = this.href, 400);
+      });
+    }
+
+  
+    if(sessionStorage.getItem('fromPage1')) {
+      sessionStorage.removeItem('fromPage1');
+      document.documentElement.classList.add('page-enter');
+      setTimeout(() => {
+        document.documentElement.classList.remove('page-enter');
+      }, 400);
+    }
+
+    
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      img.src = images[index].src;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      document.getElementById('lightbox-img').src = images[currentIndex].src;
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      document.getElementById('lightbox-img').src = images[currentIndex].src;
+    }
+
+   
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox').classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+    });
+  </script>
+
+  <footer class="footer">
+    <p>© 2025 ForYouJoki. All rights reserved.</p>
+  </footer>
+</body>
+</html>

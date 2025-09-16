@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ForYouJoki</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/zh-cn-genshin-impact" rel="stylesheet">
+
+  <style>
+    :root {
+      --accent: #ffe082;
+      --glass: rgba(255,255,255,0.18);
+      --ios-ease: cubic-bezier(.22,1,.36,1);
+      --bounce: cubic-bezier(0.2, 1.8, 0.2, 1);
+      --float: cubic-bezier(0.4, 0, 0.2, 1);
+      --swift: 260ms;
+      --med: 460ms;
+      --long: 700ms;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body {
+      margin: 0;
+      font-family: 'Quicksand', cursive, sans-serif;
+      background: url('background_kazuha.jpeg') center/cover no-repeat fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #fff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .bg-blur { position: fixed; inset: 0; backdrop-filter: blur(12px) brightness(0.65); z-index:-1; }
+    .sidebar {
+      position: fixed; left: 0; top: 0; width: 90px; height: 100vh;
+      display:flex; flex-direction:column; align-items:center; padding:32px 0;
+      background: rgba(255,255,255,0.08); border-radius:0 18px 18px 0; z-index:10;
+      box-shadow: 2px 0 24px #0003;
+    }
+    .sidebar-logo { width:56px; border-radius:12px; padding:8px; background:rgba(255,255,255,0.14); box-shadow:0 4px 14px #0003; margin-bottom:22px }
+    .sidebar-logo img{width:100%;display:block}
+    header{margin-left:90px; width:calc(100% - 90px); padding:28px 80px; box-sizing:border-box; display:flex; justify-content:flex-end}
+    nav{display:flex; gap:34px; align-items:center}
+    nav a{ color:#fff; text-decoration:none; font-weight:700; letter-spacing:2px; padding:6px 10px; border-radius:10px; transition: all .28s var(--ios-ease) }
+    nav a:hover, nav a.active{ color:var(--accent); background: rgba(255,255,255,0.06) }
+    .nav-more { position:relative; }
+    .dropdown {
+      position:absolute; top:110%; right:0; width:260px;
+      background: var(--glass); backdrop-filter: blur(10px); border-radius:14px; padding:12px;
+      box-shadow:0 18px 50px rgba(0,0,0,0.55); transform-origin:top right;
+      opacity:0; transform: translateY(8px) scale(.98); pointer-events:none;
+      transition: opacity .28s var(--ios-ease), transform .28s var(--ios-ease);
+      border:1px solid rgba(255,255,255,0.06); z-index:90;
+    }
+    .nav-more.open .dropdown{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+    .dropdown .section{ margin-bottom:8px; }
+    .dropdown a.item{ display:flex; gap:12px; align-items:center; padding:8px; border-radius:8px; color:#fff; text-decoration:none }
+    .dropdown a.item:hover{ background: rgba(255,255,255,0.04); color:var(--accent) }
+    .social-icon{ width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.06); border-radius:8px }
+    main{ margin-left:90px; padding:40px 60px; min-height:calc(100vh - 80px); box-sizing:border-box; display:flex; flex-direction:column; align-items:center }
+    .main-content{ width:100%; max-width:1500px; display:flex; gap:48px; align-items:center; justify-content:space-between; flex-wrap:wrap }
+    .center-block{ flex:1; min-width:320px; display:flex; flex-direction:column; gap:20px; align-items:flex-start }
+    .title{
+      font-family: 'ZH CN Genshin Impact', 'Quicksand', cursive, sans-serif;
+      font-size:4.2rem; letter-spacing:.22em; margin:0; line-height:0.95;
+      background: linear-gradient(90deg, #fff 46%, var(--accent) 100%);
+      -webkit-background-clip: text; background-clip:text;
+      -webkit-text-fill-color: transparent; color: transparent;
+      text-shadow: 0 6px 26px rgba(0,0,0,0.55);
+      transition: transform .42s var(--ios-ease);
+    }
+    .glass{ background: rgba(255,255,255,0.12); border-radius:18px; padding:22px; backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.06) }
+    .desc{ max-width:720px; font-size:1.06rem; line-height:1.68; text-align:justify }
+    .filter-row{ display:flex; gap:14px; flex-wrap:wrap }
+    .anim-btn{ cursor:pointer; padding:10px 18px; border-radius:12px; background:rgba(255,255,255,0.10); color:#fff; font-weight:700; transition: transform .32s var(--ios-ease), box-shadow .32s }
+    .anim-btn:hover{ transform: translateY(-6px) scale(1.03); box-shadow:0 18px 50px rgba(0,0,0,0.45); color:var(--accent) }
+    .main-card{ flex:0 0 520px; width:520px; height:360px; border-radius:26px; overflow:hidden; box-shadow:0 22px 80px rgba(0,0,0,0.62); transition: transform .42s var(--ios-ease) }
+    .main-card img{ width:100%; height:100%; object-fit:cover; display:block }
+    .main-card:hover{ transform: translateY(-10px) scale(1.03) }
+    .big-cards-row{ display:flex; gap:34px; justify-content:center; flex-wrap:wrap; margin-top:36px; width:100% }
+    .big-card{ min-width:300px; max-width:420px; height:280px; border-radius:20px; overflow:hidden; transition: transform .36s var(--ios-ease) }
+    .big-card img{ width:100%; height:100%; object-fit:cover }
+    @keyframes smoothExit { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.98); } }
+    .page-exit { animation: smoothExit 0.4s var(--ios-ease) forwards; pointer-events: none; }
+    .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; z-index:9999 }
+    .lightbox.active{ display:flex }
+    .lightbox-content{ position:relative; max-width:90vw; max-height:90vh; display:flex; align-items:center; justify-content:center }
+    .lightbox img{ max-width:90vw; max-height:90vh; object-fit:contain; border-radius:12px }
+    @keyframes pageEnter { 0% { opacity: 0; transform: scale(.992); } 100% { opacity: 1; transform: scale(1); } }
+    body { animation: pageEnter var(--med) var(--ios-ease); }
+    .sidebar-logo { transition: transform var(--swift) var(--bounce); }
+    .sidebar-logo:hover { transform: scale(1.12) rotate(-4deg); }
+    nav a { transition: all var(--swift) var(--bounce); }
+    nav a:hover { transform: translateY(-4px); color: var(--accent); background: rgba(255,255,255,0.08); }
+    .title { animation: titleFloat 4s var(--float) infinite; transition: transform var(--med) var(--bounce); }
+    @keyframes titleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .anim-btn { transition: all var(--swift) var(--bounce); }
+    .anim-btn:hover { transform: translateY(-6px) scale(1.04); box-shadow: 0 20px 60px rgba(255,224,130,0.3); }
+    .anim-btn:active { transform: translateY(-2px) scale(0.98); }
+    .main-card { transition: all var(--med) var(--bounce); }
+    .main-card:hover { transform: translateY(-12px) scale(1.03) rotate(1deg); box-shadow: 0 30px 90px rgba(0,0,0,0.8); }
+    .main-card img { transition: transform var(--long) var(--float); }
+    .main-card:hover img { transform: scale(1.08); }
+    .big-card { transition: all var(--med) var(--bounce); }
+    .big-card:hover { transform: translateY(-8px) scale(1.04); box-shadow: 0 24px 70px rgba(0,0,0,0.7); }
+    .big-card img { transition: transform var(--long) var(--float); }
+    .big-card:hover img { transform: scale(1.12); }
+    .dropdown { transition: all var(--swift) var(--bounce); }
+    .nav-more.open .dropdown { transform: translateY(0) scale(1); opacity: 1; }
+    .lightbox { transition: opacity var(--med) var(--ios-ease); opacity: 0; pointer-events: none; }
+    .lightbox.active { opacity: 1; pointer-events: auto; }
+    .lightbox-content { transition: transform var(--med) var(--bounce); transform: scale(0.95); }
+    .lightbox.active .lightbox-content { transform: scale(1); }
+    @media (max-width:1200px){ .main-card{ width:90%; height:360px } .title{ font-size:3.6rem } }
+    @media (max-width:768px){ header{ padding:20px 36px } .title{ font-size:2.6rem; letter-spacing:.12em } .main-card{ height:300px } }
+
+    /* woi */
+    /* atat ( aceng pantat ) */
+    @media (max-width: 768px) {
+      /* taik */
+      body { background-attachment: scroll !important; }
+
+      /* stay amanah */
+      .sidebar { display: none !important; }
+
+      /* header & main full width */
+      header { margin-left: 0 !important; width: 100% !important; padding: 14px 16px !important; justify-content: center !important; }
+      main { margin-left: 0 !important; padding: 18px 16px !important; min-height: calc(100vh - 140px) !important; }
+
+      /* konten jadi column & center */
+      .main-content { flex-direction: column !important; align-items: center !important; gap: 18px !important; text-align: center !important; }
+      .center-block { align-items: center !important; text-align: center !important; width: 100% !important; }
+
+      /* judul lebih kecil biar muat */
+      .title { font-size: 2.2rem !important; letter-spacing: .1em !important; line-height: 1.05 !important; margin-bottom: 6px !important; }
+
+      /* deskripsi center */
+      .desc { text-align: center !important; max-width: 100% !important; padding: 0 6px !important; }
+
+      /* tombol rata tengah */
+      .filter-row { justify-content: center !important; flex-wrap:wrap !important; }
+
+      /* card & gallery full width ( biar ga kebesaran) */
+      .main-card { width: 100% !important; max-width: 420px !important; height: auto !important; }
+      .main-card img { height: auto !important; display:block; }
+
+      .big-cards-row { flex-direction: column !important; align-items: center !important; gap: 18px !important; width:100% !important; }
+      .big-card { width: 92% !important; max-width: 420px !important; height: auto !important; }
+
+      /* ha apaan */
+      .nav-more { width: auto !important; }
+      .dropdown { right: 12px !important; left: 12px !important; width: calc(100% - 32px) !important; transform-origin: top center !important; }
+
+      /* onyot */
+      nav { justify-content: center !important; gap: 12px !important; flex-wrap: wrap !important; padding: 4px 0 !important; }
+
+      /* ayam kampong */
+      .bg-blur { background-position: center top !important; }
+
+      /* pt omling */
+      .footer { text-align: center !important; padding: 12px 10px !important; }
+      .footer p { margin: 0 auto; display: inline-block; }
+
+      /* keyboard gamen */
+      .sidebar-logo { display: none !important; }
+    }
+    /* ========================================================================================== */
+
+    .footer {
+      width: 100%; text-align: center; padding: 16px;
+      background: rgba(255,255,255,0.08); backdrop-filter: blur(6px);
+      font-size: 0.9rem; color: #fff; margin-top: 40px;
+    }
+    @media (max-width: 768px) { .footer { font-size: 0.8rem; padding: 12px; } }
+  </style>
+</head>
+<body>
+  <div class="bg-blur"></div>
+  <aside class="sidebar">
+    <div class="sidebar-logo"><img src="logo_genshin.png" alt="Logo"></div>
+  </aside>
+  <header>
+    <nav>
+      <a class="active" href="#">H O M E</a>
+      <a href="Page2.html" id="galleryLink">G A L L E R Y</a>
+      <div class="nav-more" id="navMoreRoot">
+        <a href="#" id="moreToggle" aria-expanded="false">M O R E ▾</a>
+        <div class="dropdown" id="morePanel" aria-hidden="true">
+          <div class="section">
+            <div style="font-weight:800;color:var(--accent);margin-bottom:6px">Sosial & Kontak</div>
+            <a class="item" href="https://www.tiktok.com/@foryou.joki" target="_blank"><span class="social-icon"><img src="logo_tiktok.png" alt="tiktok" style="width:18px;height:18px"></span> TikTok</a>
+            <a class="item" href="https://discord.gg/Ch2A67VctN" target="_blank"><span class="social-icon"><img src="logo_discord.png" alt="discord" style="width:18px;height:18px"></span> Discord</a>
+            <a class="item" href="https://wa.me/6285693946079" target="_blank"><span class="social-icon"><img src="logo_wa.png" alt="wa" style="width:18px;height:18px"></span> WhatsApp</a>
+          </div>
+          <div class="section" style="border-top:1px solid rgba(255,255,255,0.04);padding-top:8px">
+            <a class="item" href="Page3.html">Price List</a>
+            <a class="item" href="Page4.html">Top Donatur</a>
+            <a class="item" href="Page5.html">Info Server</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="main-content">
+      <div class="center-block">
+        <h1 class="title">ForYouJoki</h1>
+        <div class="desc glass">
+          <p><strong>ForYouStoreJoki</strong> adalah penyedia jasa joki <strong>Genshin Impact</strong> yang siap membantu pemain mencapai progres lebih cepat. Kami hadir untuk mereka yang sibuk dengan aktivitas sehari-hari, tapi tetap ingin menikmati game tanpa harus menghabiskan waktu berjam-jam buat farming dan grinding.</p>
+        </div>
+        <div class="filter-row">
+          <button class="anim-btn">✨ Harga Terjangkau</button>
+          <button class="anim-btn">⚡ Proses Cepat</button>
+          <button class="anim-btn">💬 Admin Ramah</button>
+        </div>
+      </div>
+      <div class="main-card" id="sharedImageNode">
+        <img src="joki4.png" alt="design">
+      </div>
+    </div>
+    <div class="big-cards-row">
+      <div class="big-card"><img src="Joki3.png" alt="Selpi"></div>
+      <div class="big-card"><img src="joki2.png" alt="Vcs"></div>
+      <div class="big-card"><img src="joki1.png" alt="Pantek"></div>
+    </div>
+  </main>
+  <footer class="footer">
+    <p>© 2025 ForYouJoki. All rights reserved.</p>
+  </footer>
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <img src="" alt="Lightbox Image" id="lightbox-img">
+      <button class="close-lightbox" onclick="closeLightbox();event.stopPropagation();">&times;</button>
+    </div>
+  </div>
+  <script>
+    /* biji peler */
+    const moreToggle = document.getElementById('moreToggle');
+    const morePanel = document.getElementById('morePanel');
+    const navMoreRoot = document.getElementById('navMoreRoot');
+
+    // gali raja singa
+    moreToggle.addEventListener('click', e => {
+      e.preventDefault();
+      navMoreRoot.classList.toggle('open');
+      const isOpen = navMoreRoot.classList.contains('open');
+      morePanel.setAttribute('aria-hidden', !isOpen);
+      moreToggle.setAttribute('aria-expanded', isOpen);
+    });
+
+    // pantat
+    document.addEventListener('click', e => {
+      if (!navMoreRoot.contains(e.target)) {
+        navMoreRoot.classList.remove('open');
+        morePanel.setAttribute('aria-hidden', 'true');
+        moreToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // pantat
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        navMoreRoot.classList.remove('open');
+        morePanel.setAttribute('aria-hidden', 'true');
+        moreToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // apa jir
+    const galleryLink = document.getElementById('galleryLink');
+    if(galleryLink) {
+      galleryLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        sessionStorage.setItem('fromPage1', '1');
+        document.documentElement.classList.add('page-exit');
+        setTimeout(() => location.href = this.href, 400);
+      });
+    }
+
+    // ini buat biji peler
+    function openLightbox(src){
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const content = lb.querySelector('.lightbox-content');
+
+      img.src = src;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      content.style.transform = 'scale(0.95)';
+      requestAnimationFrame(() => {
+        content.style.transform = 'scale(1)';
+      });
+    }
+
+    function closeLightbox(){
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      lb.classList.remove('active');
+      document.body.style.overflow = '';
+      setTimeout(()=> img.src = '', 320);
+    }
+
+    // biar bisa di pencet ini jer
+    document.querySelectorAll('.main-card img, .big-card img').forEach(img => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', function(){ openLightbox(this.src); });
+    });
+
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeLightbox();
+        navMoreRoot.classList.remove('open');
+        morePanel.setAttribute('aria-hidden','true');
+        moreToggle.setAttribute('aria-expanded','false');
+      }
+    });
+
+  
+    if(sessionStorage.getItem('fromPage2')){ sessionStorage.removeItem('fromPage2'); }
+  </script>
+</body>
+</html>
